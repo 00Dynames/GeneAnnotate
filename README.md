@@ -1,6 +1,6 @@
 # GeneAnnotate
 
-#ORF searching tools
+##ORF searching tools
   - checktrans Reports STOP codons and ORF statistics of a protein
   - getorf     Finds and extracts open reading frames (ORFs)
   - plotorf    Plot potential open reading frames in a nucleotide sequence
