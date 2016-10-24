@@ -8,12 +8,34 @@ use List::Util qw( min max );
 
 my $user_agent = LWP::UserAgent->new;
 
+$argc = $#ARGV + 1;
+my $ps = 0;
+
+
+if ($argc < 1){
+    print "usage: geneannot.pl query\n";
+    exit;
+} else {
+
+    foreach my $option (@ARGV){
+        if ($option =~ /^-ps/gi){ 
+            shift @ARGV;
+            $ps = 1;
+        }
+    
+    }
+
+
+
+}
+
+
 my $query_seq = $ARGV[0];
 my $query_name = (split /\./, $query_seq)[0];
 my $query_id = "";
 
 # open output file
-open(OUTPUT, ">annotateout.gff") or die "Cannot open file\n";
+open(OUTPUT, ">annotate$query_name.gff") or die "Cannot open file\n";
 print OUTPUT "##gff-version 3\n";
 
 # Do ORF finding
@@ -34,6 +56,12 @@ while(my $line = <ORF>){
         
         (my $start = $gff_row[1]) =~ s/[^0-9]//g;
         (my $end = $gff_row[3]) =~ s/[^0-9]//g;
+
+        if ($start > $end){
+            my $tmp = $start;
+            $start = $end;
+            $end = $tmp;
+        }
 
         # No type 
         $result = $result."\tORF\t.\t$start\t$end\t.";
@@ -127,7 +155,7 @@ while (0){ # while true:
 # retrieve and display results
 $req = new HTTP::Request GET => "https://blast.ncbi.nlm.nih.gov/blast/Blast.cgi?CMD=Get&FORMAT_TYPE=Text&RID=$rid";
 $response = $user_agent->request($req);
-
+#print $response->content;
 
 # parse out BLAST results to GFF output
 my $result = "";
@@ -178,6 +206,10 @@ foreach my $line (split(/\n/, $response->content)){
         (my $add = $line_split[3]) =~ s/[0-9]//gi;
         $result = "$result $add";
     }
+}
+
+if ($ps == 1){
+    `gff2ps -v annotate$query_name.gff > annotate$query_name.ps`
 }
 
 close(OUTPUT);
