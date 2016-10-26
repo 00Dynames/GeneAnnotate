@@ -1,9 +1,8 @@
 # GeneAnnotate
 
-##ORF searching tools
-  - checktrans Reports STOP codons and ORF statistics of a protein
-  - getorf     Finds and extracts open reading frames (ORFs)
-  - plotorf    Plot potential open reading frames in a nucleotide sequence
-  - showorf    Display a nucleotide sequence and translation in pretty format
-  - sixpack    Display a DNA sequence with 6-frame translation and ORFs
-
+    - GeneAnnotate is a python script that takes a gene sequence as a fasta file and aannotates it for ORF's and BLASTx matches
+    - GeneAnnotate assumes that binftools (installed on CSE machines) is installed and available on your system
+        - GeneAnnotate is dependent on getorf from the above 
+        - Note: it should work if you have getorf and nothing else
+     
+    - use "-h" for help
